@@ -1,7 +1,7 @@
 import { observable, computed } from 'mobx'
 import Router from 'next/router'
 import firebase from 'firebase'
-import { auth } from './'
+import { auth, ref } from './'
 
 let store = null
 
@@ -13,9 +13,9 @@ class Store {
     this.unwatchAuth = auth.onAuthStateChanged(user => {
       this.user = user
       this.authIsPending = false
-      if(user) {
-        Router.push('/diary')
-      }
+      // if(user) {
+      //   Router.push('/diary')
+      // }
     })
   }
 
@@ -26,7 +26,7 @@ class Store {
   }
 
   register = (email, password) => {
-    firebase.auth.createUserWithEmailAndPassword(email, password)
+    firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((user) => {
           return ref.child(`users/${user.uid}`)
             .set({
@@ -39,11 +39,11 @@ class Store {
   }
 
   signIn = (email, password) => {
-    firebase.auth.signInWithEmailAndPassword(email, password)
+    firebase.auth().signInWithEmailAndPassword(email, password)
   }
 
   resetPassword = (email) => {
-    firebase.auth.sendPasswordResetEmail(email)
+    firebase.auth().sendPasswordResetEmail(email)
   }
 
   signOut = () => {
@@ -54,7 +54,7 @@ class Store {
   }
 
   @computed get isAuthenticated() {
-      return !!this.user
+    return !!this.user
   }
 }
 

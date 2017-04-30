@@ -14,6 +14,7 @@ try {
 
 export const auth = firebase.auth()
 export const db = firebase.database()
+export const ref = firebase.database().ref()
 
 export { default as initBaseStore } from './_base-store'
 export { default as getAuthStore } from './_auth-store'

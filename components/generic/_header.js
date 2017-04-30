@@ -1,12 +1,28 @@
-import React from 'react'
-import Link from 'next/prefetch'
+import React, { Component } from 'react'
+import Link from 'next/link'
+import { observer, inject } from 'mobx-react'
+import { Login, Register } from '~/components/auth'
 
-const Header = () => (
-  <header className='header'>
-    <Link href='/'><a>Home</a></Link>
-    <Link href='/diary'><a>Diary</a></Link>
-    <Link href='/login'><a>Login</a></Link>
-  </header>
-)
+@inject('AuthStore') @observer
+export default class Header extends Component {
+  componentDidMount () {
+    this.props.AuthStore.start()
+  }
 
-export default Header
+  componentWillUnmount () {
+    this.props.AuthStore.stop()
+  }
+  render () {
+    return (
+      <header className='header'>
+        <Link prefetch href='/'><a>Home</a></Link>
+        <Link prefetch href='/diary'><a>Diary</a></Link>
+        {this.props.AuthStore.user ?
+          <Link prefetch href='/register'><a>Register</a></Link>
+          :
+          <Link prefetch href='/login'><a>Login</a></Link>
+        }
+      </header>
+    )
+  }
+}

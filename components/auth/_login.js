@@ -1,26 +1,23 @@
 import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 
-function setErrorMsg(error) {
-  return {
-    registerError: error
-  }
-}
-
 @inject('AuthStore') @observer
 export default class Login extends Component {
-  state = { loginMessage: null }
   handleSubmit = (e) => {
     e.preventDefault()
-    signIn(this.email.value, this.password.value)
-      .catch((error) => {
-          this.setState(setErrorMsg('Invalid username/password.'))
-        })
+    this.props.AuthStore.signIn(this.email.value, this.password.value)
   }
+
   resetPassword = () => {
-    resetPassword(this.email.value)
-      .then(() => this.setState(setErrorMsg(`Password reset email sent to ${this.email.value}.`)))
-      .catch((error) => this.setState(setErrorMsg(`Email address not found.`)))
+    this.props.AuthStore.resetPassword(this.email.value)
+  }
+
+  componentDidMount () {
+    this.state.AuthStore.start()
+  }
+
+  componentWillUnmount () {
+    this.state.AuthStore.stop()
   }
 
   render () {
@@ -39,13 +36,10 @@ export default class Login extends Component {
               <label>Password</label>
               <input type="password" placeholder="Password" ref={(password) => this.password = password} />
             </div>
-            {
-              this.state.loginMessage &&
-              <div role="alert">
-                <span aria-hidden="true"></span>
-                {this.state.loginMessage} <a href="#" onClick={this.resetPassword}>Forgot Password?</a>
-              </div>
-            }
+            <div role="alert">
+              <span aria-hidden="true"></span>
+              <a href="#" onClick={this.resetPassword}>Forgot Password?</a>
+            </div>
             <button type="submit">Login</button>
           </form>
         }

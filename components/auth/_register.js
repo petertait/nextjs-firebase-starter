@@ -12,14 +12,13 @@ export default class Register extends Component {
   state = { registerError: null }
   handleSubmit = (e) => {
     e.preventDefault()
-    register(this.email.value, this.password.value)
+    this.props.AuthStore.register(this.email.value, this.password.value)
       .catch(e => this.setState(setErrorMsg(e)))
   }
 
   render () {
     return (
       <div>
-        {this.props.BaseStore.helloMessage}
         <form onSubmit={this.handleSubmit}>
           <div>
             <label>Email</label>

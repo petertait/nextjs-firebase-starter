@@ -13,7 +13,7 @@ export default function protectedPage(Page) {
           && !getAuthStore().authIsPending
           && !getAuthStore().isAuthenticated
         ) {
-          Router.push('/access-denied')
+          this.props.router.push('/login')
         }
       })
     }

@@ -3,10 +3,10 @@ import { initializePage } from '~/utils'
 import { Page } from '~/components/layouts'
 import { Register } from '~/components/auth'
 
-const About = () => (
+const RegisterPage = () => (
   <Page>
     <Register />
   </Page>
 )
 
-export default initializePage(About)
+export default initializePage(RegisterPage)
